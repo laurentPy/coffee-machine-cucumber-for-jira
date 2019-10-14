@@ -1,0 +1,21 @@
+#!/bin/bash
+EXIT_STATUS=0
+
+header() {
+  echo "==============================================================================="
+  echo $*
+  echo "==============================================================================="
+}
+
+header "bundle exec cucumber"
+bundle exec cucumber
+bundle exec cucumber --format json --out results.json || EXIT_STATUS=$?
+
+header "push results to living documentation"
+
+# Set here the Curl command of CI Settings in the living documentation tab
+curl -X POST https://c4j.cucumber.io/ci/rest/api/results -H 'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20uc21hcnRiZWFyLmN1Y3VtYmVyIiwiYXVkIjoiY2kiLCJjb250ZXh0Ijp7ImxpdmluZ19kb2NfaWQiOjMwNH0sImlhdCI6MTU3MTA2NDA5OH0.xsCGJr9u4kanbmlw9D6NViW0b6_gb-SL9R8HxrCZYx4' -H 'content-type: multipart/form-data' -F results_file=@results.json -F language=ruby
+echo ""
+header "Done"
+
+exit $EXIT_STATUS
