@@ -1,5 +1,5 @@
 Feature: Beans
-    As a coffee lover
+    As an expresso coffee lover
     I have to put fresh beans from time to time
     So I can have coffee when I need it
 
